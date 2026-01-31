@@ -3,9 +3,13 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 
 export default function Home() {
-  const [layers, setLayers] = useState<Array<{ color: string; phase: "closed" | "opening" | "done" }>>([]);
+  const [layers, setLayers] = useState<
+    Array<{ color: string; phase: "closed" | "opening" | "done" }>
+  >([]);
   const [imageRevealed, setImageRevealed] = useState(false);
-  const [textBgLayers, setTextBgLayers] = useState<Array<{ color: string; phase: "closed" | "opening" | "done" }>>([]);
+  const [textBgLayers, setTextBgLayers] = useState<
+    Array<{ color: string; phase: "closed" | "opening" | "done" }>
+  >([]);
   const colorIndexRef = useRef(0);
   const textColorIndexRef = useRef(0);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -21,12 +25,15 @@ export default function Home() {
   const scheduleNext = useCallback(() => {
     timeoutRef.current = setTimeout(() => {
       cycleCountRef.current += 1;
-      
+
       if (cycleCountRef.current === 1) {
         // First cycle - add initial color
         colorIndexRef.current = 0;
         const initialColor = colors[0];
-        setLayers((prev) => [...prev, { color: initialColor, phase: "closed" }]);
+        setLayers((prev) => [
+          ...prev,
+          { color: initialColor, phase: "closed" },
+        ]);
 
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
@@ -82,7 +89,7 @@ export default function Home() {
   // Continuous color cycling for text backgrounds after image reveal
   const scheduleTextBgCycle = useCallback(() => {
     const newColor = colors[textColorIndexRef.current];
-    
+
     // Add new layer in "closed" state
     setTextBgLayers((prev) => [...prev, { color: newColor, phase: "closed" }]);
 
@@ -91,8 +98,8 @@ export default function Home() {
       requestAnimationFrame(() => {
         setTextBgLayers((prev) =>
           prev.map((layer, i) =>
-            i === prev.length - 1 ? { ...layer, phase: "opening" } : layer
-          )
+            i === prev.length - 1 ? { ...layer, phase: "opening" } : layer,
+          ),
         );
       });
     });
@@ -104,7 +111,10 @@ export default function Home() {
   const handleTextBgTransitionEnd = () => {
     // Clean up old layers, keep only last 2
     setTextBgLayers((prev) => {
-      const updated = prev.map((layer) => ({ ...layer, phase: "done" as const }));
+      const updated = prev.map((layer) => ({
+        ...layer,
+        phase: "done" as const,
+      }));
       return updated.length > 2 ? updated.slice(-2) : updated;
     });
 
@@ -178,7 +188,7 @@ export default function Home() {
 
       {/* Center text during color cycle — above colors, below image */}
       <div
-        className="absolute inset-0 flex items-center justify-center"
+        className="absolute inset-0 flex flex-col items-center justify-center"
         style={{ zIndex: 50 }}
       >
         <h1
@@ -187,6 +197,22 @@ export default function Home() {
         >
           ìwádìí
         </h1>
+
+        {/* Loading message */}
+        <div className="absolute bottom-32 flex flex-col items-center gap-2">
+          <p
+            className="text-black text-lg"
+            style={{ fontFamily: "var(--font-inter)" }}
+          >
+            Loading..
+          </p>
+          <p
+            className="text-black text-xl opacity-80"
+            style={{ fontFamily: "var(--font-inter)" }}
+          >
+            For the full experience, let curiosity guide you.
+          </p>
+        </div>
       </div>
 
       {/* Image layer */}
