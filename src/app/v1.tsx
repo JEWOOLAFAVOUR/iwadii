@@ -1,7 +1,9 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 
 export default function Home() {
-  const [layers, setLayers] = useState<Array<{ color: string; phase: "closed" | "opening" | "done" }>>([]);
+  const [layers, setLayers] = useState<
+    Array<{ color: string; phase: "closed" | "opening" | "done" }>
+  >([]);
   const [imageRevealed, setImageRevealed] = useState(false);
   const colorIndexRef = useRef(0);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
