@@ -1,8 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Ojuju:wght@200..800&display=swap');
 @import "tailwindcss";
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --font-ojuju: "Ojuju", sans-serif;
 }
 
 @theme inline {
